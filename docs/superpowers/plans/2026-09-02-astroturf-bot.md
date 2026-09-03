@@ -1969,7 +1969,7 @@ def test_style_violation_regenerates_once():
 
 
 def test_double_violation_skips_with_log():
-    client = FakeLLM(["first. second", "third. fourth"])
+    client = FakeLLM(["first one. second one.", "third one. fourth one."])
     entries, skips = generate_replies(client, settings(), [flagged()], ITEMS)
     assert entries == []
     assert len(skips) == 1
