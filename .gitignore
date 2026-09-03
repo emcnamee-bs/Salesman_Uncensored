@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Pipeline data (contents gitignored; folders kept via .gitkeep)
+inbox/*
+!inbox/.gitkeep
+out/*
+!out/.gitkeep
+data/*
+!data/.gitkeep

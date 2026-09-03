@@ -1,0 +1,18 @@
+{
+  "store_name": "merchmarket",
+  "lmstudio": {
+    "base_url": "http://localhost:1234/v1",
+    "keyword_model": "qwen2.5-14b-instruct",
+    "reply_model": "qwen2.5-7b-instruct"
+  },
+  "limits": {
+    "max_replies_per_day": 5,
+    "max_replies_per_sub_per_day": 2,
+    "min_delay_seconds": 120,
+    "max_delay_seconds": 600
+  },
+  "style": {
+    "include_links": false,
+    "max_reply_words": 40
+  }
+}

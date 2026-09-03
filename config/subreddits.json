@@ -1,0 +1,4 @@
+[
+  { "subreddit": "r/spiderman", "enabled": true },
+  { "subreddit": "r/venom", "enabled": true, "max_replies_per_sub_per_day": 1 }
+]
