@@ -1585,7 +1585,7 @@ Enforces the spec §7 style rules in code (the prompt enforces them too).
 - Consumes: `Settings` (Task 1) — uses `max_reply_words`, `include_links`, `store_name`.
 - Produces: `validate_reply(text: str, settings: Settings) -> tuple[bool, str]` — `(True, "")` when valid; otherwise `(False, reason)` with a short human-readable reason.
 
-Rules checked in order: non-empty → at most ONE sentence (two or more terminal-punctuation runs of `[.!?]+` = fail; zero terminals is allowed — casual Reddit replies often drop the final period) → word count ≤ `max_reply_words` → no links when `include_links` is false → store name appears at most once.
+Rules checked in order: non-empty → no links when `include_links` is false (checked before sentence counting because real URLs contain multiple dots and would otherwise be misreported as two-sentence violations) → at most ONE sentence (two or more terminal-punctuation runs of `[.!?]+` = fail; zero terminals is allowed — casual Reddit replies often drop the final period) → word count ≤ `max_reply_words` → store name appears at most once.
 
 - [ ] **Step 1: Write the failing test** — create `tests/test_validate.py`:
 
@@ -1692,6 +1692,11 @@ def validate_reply(text: str, settings: Settings) -> tuple[bool, str]:
     if not t:
         return False, "reply is empty"
 
+    # links first: real URLs contain multiple dots and would otherwise be
+    # misreported as a two-sentence violation
+    if not settings.include_links and re.search(r"(https?://|www\.)", t):
+        return False, "reply contains a link but include_links is false"
+
     sentences = len(re.findall(r"[.!?]+", t))
     if sentences >= 2:
         return False, f"expected one sentence, found {sentences} terminal punctuation runs"
@@ -1699,9 +1704,6 @@ def validate_reply(text: str, settings: Settings) -> tuple[bool, str]:
     words = len(t.split())
     if words > settings.max_reply_words:
         return False, f"{words} words exceeds max of {settings.max_reply_words}"
-
-    if not settings.include_links and re.search(r"(https?://|www\.)", t):
-        return False, "reply contains a link but include_links is false"
 
     store = settings.store_name.lower()
     if store:
