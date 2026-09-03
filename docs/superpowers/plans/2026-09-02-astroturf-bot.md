@@ -885,7 +885,10 @@ def relevant_items(items: list, keywords: list[str]) -> list:
 
     scored = sorted(items, key=score, reverse=True)
     matched = [i for i in scored if score(i) > 0]
-    chosen = matched[:25] if matched else items[:10]
+    rest = [i for i in scored if score(i) == 0]
+    # matches first, then the remainder as context padding (cap 25);
+    # when nothing matches at all, fall back to the first 10 items
+    chosen = (matched + rest)[:25] if matched else items[:10]
     return chosen
 
 
