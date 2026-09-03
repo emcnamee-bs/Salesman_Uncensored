@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "MerchMarket Astroturfer",
+  "version": "0.1.0",
+  "description": "Loads generated replies and posts them to old.reddit.com comments with human pacing.",
+  "permissions": ["storage", "tabs"],
+  "action": { "default_popup": "popup.html" },
+  "content_scripts": [
+    {
+      "matches": ["https://old.reddit.com/*", "https://www.reddit.com/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
